@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ExternalIncludePath>$(SolutionDir)vendor\imgui\backends;$(SolutionDir)vendor\imgui;$(SolutionDir)vendor\stb_image;$(SolutionDir)vendor\glfw\include;$(SolutionDir)vendor\glew\include;$(SolutionDir)vendor\glm;$(SolutionDir)vendor\assimp\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)vendor\Jolt\include;$(SolutionDir)vendor\imgui\backends;$(SolutionDir)vendor\imgui;$(SolutionDir)vendor\stb_image;$(SolutionDir)vendor\glfw\include;$(SolutionDir)vendor\glew\include;$(SolutionDir)vendor\glm;$(SolutionDir)vendor\assimp\include;$(ExternalIncludePath)</ExternalIncludePath>
     <IncludePath>$(SolutionDir);$(SolutionDir)Tests;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ExternalIncludePath>$(SolutionDir)vendor\imgui\backends;$(SolutionDir)vendor\imgui;$(SolutionDir)vendor\stb_image;$(SolutionDir)vendor\glfw\include;$(SolutionDir)vendor\glew\include;$(SolutionDir)vendor\glm;$(SolutionDir)vendor\assimp\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)vendor\Jolt\include;$(SolutionDir)vendor\imgui\backends;$(SolutionDir)vendor\imgui;$(SolutionDir)vendor\stb_image;$(SolutionDir)vendor\glfw\include;$(SolutionDir)vendor\glew\include;$(SolutionDir)vendor\glm;$(SolutionDir)vendor\assimp\include;$(ExternalIncludePath)</ExternalIncludePath>
     <IncludePath>$(SolutionDir);$(SolutionDir)Tests;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -108,16 +108,18 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\assimp\lib;$(SolutionDir)vendor\glfw\lib-vc2022;$(SolutionDir)vendor\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;glew32s.lib;assimp-vc143-mtd.lib;zlibstaticd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\Jolt\lib;$(SolutionDir)vendor\assimp\lib;$(SolutionDir)vendor\glfw\lib-vc2022;$(SolutionDir)vendor\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;glew32s.lib;assimp-vc143-mtd.lib;zlibstaticd.lib;Joltd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ForceSymbolReferences>%(ForceSymbolReferences)</ForceSymbolReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -128,14 +130,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\assimp\lib;$(SolutionDir)vendor\glfw\lib-vc2022;$(SolutionDir)vendor\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;glew32s.lib;assimp-vc143-mt.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\assimp\lib;$(SolutionDir)vendor\glfw\lib-vc2022;$(SolutionDir)vendor\glew\lib;$(SolutionDir)vendor\Jolt\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;glew32s.lib;assimp-vc143-mt.lib;zlibstatic.lib;Jolt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -145,6 +148,7 @@
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="TestJolt.cpp" />
     <ClCompile Include="Tests\Test.cpp" />
     <ClCompile Include="Tests\TestAssimp.cpp" />
     <ClCompile Include="Tests\TestClearColor.cpp" />
@@ -170,6 +174,7 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="TestJolt.h" />
     <ClInclude Include="Tests\Test.h" />
     <ClInclude Include="Tests\TestAssimp.h" />
     <ClInclude Include="Tests\TestClearColor.h" />

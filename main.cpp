@@ -16,6 +16,7 @@
 //#include "TestPhysX.h"
 #include "TestTexture2D.h"
 //#include "TestVehicle.h"
+#include "TestJolt.h"
 
 // OpenGL
 #include <GL/glew.h>
@@ -93,6 +94,7 @@ int main(void) {
     testMenu->RegisterTest<test::TestAssimp>("Assimp");
     //testMenu->RegisterTest<test::TestVehicle>("Vehicle");
     testMenu->RegisterTest<test::TestNoise>("Noise");
+    testMenu->RegisterTest<test::TestJolt>("Jolt");
 
     auto currentTime = std::chrono::high_resolution_clock::now();
     auto lastUpdateTime = currentTime;

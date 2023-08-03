@@ -93,6 +93,9 @@
     <ClCompile Include="Tests\TestAssimp.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="TestJolt.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -177,6 +180,9 @@
       <Filter>Tests</Filter>
     </ClInclude>
     <ClInclude Include="Tests\TestAssimp.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="TestJolt.h">
       <Filter>Tests</Filter>
     </ClInclude>
   </ItemGroup>
