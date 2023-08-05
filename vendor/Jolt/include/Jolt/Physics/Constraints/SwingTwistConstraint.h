@@ -17,10 +17,10 @@ JPH_NAMESPACE_BEGIN
 ///
 /// This image describes the limit settings:
 /// @image html Docs/SwingTwistConstraint.png
-class SwingTwistConstraintSettings final : public TwoBodyConstraintSettings
+class JPH_EXPORT SwingTwistConstraintSettings final : public TwoBodyConstraintSettings
 {
 public:
-	JPH_DECLARE_SERIALIZABLE_VIRTUAL(SwingTwistConstraintSettings)
+	JPH_DECLARE_SERIALIZABLE_VIRTUAL(JPH_EXPORT, SwingTwistConstraintSettings)
 
 	// See: ConstraintSettings::SaveBinaryState
 	virtual void				SaveBinaryState(StreamOut &inStream) const override;
@@ -64,7 +64,7 @@ protected:
 /// A swing twist constraint is a specialized constraint for humanoid ragdolls that allows limited rotation only
 ///
 /// @see SwingTwistConstraintSettings for a description of the limits
-class SwingTwistConstraint final : public TwoBodyConstraint
+class JPH_EXPORT SwingTwistConstraint final : public TwoBodyConstraint
 {
 public:
 	JPH_OVERRIDE_NEW_DELETE
@@ -141,7 +141,7 @@ public:
 	/// Solve: R2 * ConstraintToBody2 = R1 * ConstraintToBody1 * q for q.
 	inline Quat					GetRotationInConstraintSpace() const;
 
-	///@name Get Lagrange multiplier from last physics update (relates to how much force/torque was applied to satisfy the constraint)
+	///@name Get Lagrange multiplier from last physics update (the linear/angular impulse applied to satisfy the constraint)
 	inline Vec3		 			GetTotalLambdaPosition() const								{ return mPointConstraintPart.GetTotalLambda(); }
 	inline float				GetTotalLambdaTwist() const									{ return mSwingTwistConstraintPart.GetTotalTwistLambda(); }
 	inline float				GetTotalLambdaSwingY() const								{ return mSwingTwistConstraintPart.GetTotalSwingYLambda(); }

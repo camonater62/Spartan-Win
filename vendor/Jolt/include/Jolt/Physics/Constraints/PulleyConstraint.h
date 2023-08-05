@@ -15,10 +15,10 @@ JPH_NAMESPACE_BEGIN
 /// Length2 = |BodyPoint2 - FixedPoint2|
 /// The constraint keeps the two line segments constrained so that
 /// MinDistance <= Length1 + Ratio * Length2 <= MaxDistance
-class PulleyConstraintSettings final : public TwoBodyConstraintSettings
+class JPH_EXPORT PulleyConstraintSettings final : public TwoBodyConstraintSettings
 {
 public:
-	JPH_DECLARE_SERIALIZABLE_VIRTUAL(PulleyConstraintSettings)
+	JPH_DECLARE_SERIALIZABLE_VIRTUAL(JPH_EXPORT, PulleyConstraintSettings)
 
 	// See: ConstraintSettings::SaveBinaryState
 	virtual void				SaveBinaryState(StreamOut &inStream) const override;
@@ -56,7 +56,7 @@ protected:
 };
 
 /// A pulley constraint.
-class PulleyConstraint final : public TwoBodyConstraint
+class JPH_EXPORT PulleyConstraint final : public TwoBodyConstraint
 {
 public:
 	JPH_OVERRIDE_NEW_DELETE
@@ -90,7 +90,7 @@ public:
 	/// Get the current length of both segments (multiplied by the ratio for segment 2)
 	float						GetCurrentLength() const									{ return Vec3(mWorldSpacePosition1 - mFixedPosition1).Length() + mRatio * Vec3(mWorldSpacePosition2 - mFixedPosition2).Length(); }
 
-	///@name Get Lagrange multiplier from last physics update (relates to how much force/torque was applied to satisfy the constraint)
+	///@name Get Lagrange multiplier from last physics update (the linear impulse applied to satisfy the constraint)
 	inline float	 			GetTotalLambdaPosition() const								{ return mIndependentAxisConstraintPart.GetTotalLambda(); }
 
 private:

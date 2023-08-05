@@ -32,6 +32,7 @@ public:
 	/// Constructor
 								Vec3() = default; ///< Intentionally not initialized for performance reasons
 								Vec3(const Vec3 &inRHS) = default;
+	Vec3 &						operator = (const Vec3 &inRHS) = default;
 	explicit JPH_INLINE			Vec3(Vec4Arg inRHS);
 	JPH_INLINE					Vec3(Type inRHS) : mValue(inRHS)				{ CheckW(); }
 
@@ -103,7 +104,7 @@ public:
 	static JPH_INLINE Vec3		sUnitSpherical(float inTheta, float inPhi);
 
 	/// A set of vectors uniformly spanning the surface of a unit sphere, usable for debug purposes
-	static const std::vector<Vec3> sUnitSphere;
+	JPH_EXPORT static const std::vector<Vec3> sUnitSphere;
 
 	/// Get random unit vector
 	template <class Random>

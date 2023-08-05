@@ -34,6 +34,48 @@
 #include <iostream>
 #include <string>
 
+// Jolt
+#include <Jolt/Core/Factory.h>
+#include <Jolt/Core/JobSystemThreadPool.h>
+#include <Jolt/Core/TempAllocator.h>
+#include <Jolt/Jolt.h>
+#include <Jolt/Physics/Body/BodyActivationListener.h>
+#include <Jolt/Physics/Body/BodyCreationSettings.h>
+#include <Jolt/Physics/Collision/Shape/BoxShape.h>
+#include <Jolt/Physics/Collision/Shape/SphereShape.h>
+#include <Jolt/Physics/PhysicsSettings.h>
+#include <Jolt/Physics/PhysicsSystem.h>
+#include <Jolt/RegisterTypes.h>
+
+// Callback for traces, connect this to your own trace function if you have one
+static void TraceImpl(const char *inFMT, ...) {
+    using namespace JPH;
+    // Format the message
+    va_list list;
+    va_start(list, inFMT);
+    char buffer[1024];
+    vsnprintf(buffer, sizeof(buffer), inFMT, list);
+    va_end(list);
+
+    // Print to the TTY
+    std::cout << buffer << std::endl;
+}
+
+#ifdef JPH_ENABLE_ASSERTS
+
+// Callback for asserts, connect this to your own assert handler if you have one
+static bool AssertFailedImpl(
+    const char *inExpression, const char *inMessage, const char *inFile, unsigned int inLine) {
+    // Print to the TTY
+    std::cout << inFile << ":" << inLine << ": (" << inExpression << ") "
+              << (inMessage != nullptr ? inMessage : "") << std::endl;
+
+    // Breakpoint
+    return true;
+};
+
+#endif // JPH_ENABLE_ASSERTS
+
 int main(void) {
     GLFWwindow *window;
 
@@ -81,6 +123,31 @@ int main(void) {
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init();
+
+    // Setup Jolt
+    {
+        // Disable common warnings triggered by Jolt, you can use JPH_SUPPRESS_WARNING_PUSH / JPH_SUPPRESS_WARNING_POP to store and restore the warning state
+        JPH_SUPPRESS_WARNINGS
+
+        // All Jolt symbols are in the JPH namespace
+        using namespace JPH;
+
+        // If you want your code to compile using single or double precision write 0.0_r to get a Real value that compiles to double or float depending if JPH_DOUBLE_PRECISION is set or not.
+        using namespace JPH::literals;
+
+        // Register allocation hook
+        RegisterDefaultAllocator();
+
+        // Install callbacks
+        Trace = TraceImpl;
+        JPH_IF_ENABLE_ASSERTS(AssertFailed = AssertFailedImpl;)
+
+        // Create a factory
+        Factory::sInstance = new Factory();
+
+        // Register all Jolt physics types
+        RegisterTypes();
+    }
 
     test::Test *currentTest = nullptr;
     test::TestMenu *testMenu = new test::TestMenu(&currentTest);
