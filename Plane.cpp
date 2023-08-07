@@ -56,7 +56,7 @@ void Plane::generatePlane(int widthSegments, int heightSegments, bool noisy,
             // Position
             vertices.push_back(x);
             vertices.push_back(y);
-            float z = noisy ? glm::perlin(glm::vec2(5 * x, 5 * y)) : 0.0f;
+            float z = noisy ? glm::perlin(glm::vec2(4 * x, 4 * y)) : 0.0f;
             vertices.push_back(z);
 
             // Normal
@@ -69,63 +69,10 @@ void Plane::generatePlane(int widthSegments, int heightSegments, bool noisy,
             vertices.push_back(i * seg_height);
 
             // Color
-            switch ((int) (z * 10)) {
-            case 0:
-                vertices.push_back(0.0f);
-                vertices.push_back(0.0f);
-                vertices.push_back(1.0f);
-                break;
-            case 1:
-                vertices.push_back(0.0f);
-                vertices.push_back(0.5f);
-                vertices.push_back(1.0f);
-                break;
-            case 2:
-                vertices.push_back(0.0f);
-                vertices.push_back(1.0f);
-                vertices.push_back(1.0f);
-                break;
-            case 3:
-                vertices.push_back(0.0f);
-                vertices.push_back(1.0f);
-                vertices.push_back(0.5f);
-                break;
-            case 4:
-                vertices.push_back(0.0f);
-                vertices.push_back(1.0f);
-                vertices.push_back(0.0f);
-                break;
-            case 5:
-                vertices.push_back(0.5f);
-                vertices.push_back(1.0f);
-                vertices.push_back(0.0f);
-                break;
-            case 6:
-                vertices.push_back(1.0f);
-                vertices.push_back(1.0f);
-                vertices.push_back(0.0f);
-                break;
-            case 7:
-                vertices.push_back(1.0f);
-                vertices.push_back(0.5f);
-                vertices.push_back(0.0f);
-                break;
-            case 8:
-                vertices.push_back(1.0f);
-                vertices.push_back(0.0f);
-                vertices.push_back(0.0f);
-                break;
-            case 9:
-                vertices.push_back(1.0f);
-                vertices.push_back(0.0f);
-                vertices.push_back(0.5f);
-                break;
-            default:
-                vertices.push_back(1.0f);
-                vertices.push_back(0.0f);
-                vertices.push_back(1.0f);
-                break;
-            }
+            float color = (z + 1.0f) / 2.0f;
+            vertices.push_back(color);
+            vertices.push_back(color);
+            vertices.push_back(color);
         }
     }
 

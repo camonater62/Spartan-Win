@@ -19,8 +19,11 @@ void VertexArray::AddBuffer(const VertexBuffer &vb, const VertexBufferLayout &la
     for (unsigned int i = 0; i < elements.size(); i++) {
         const auto &element = elements[i];
         GLCall(glEnableVertexAttribArray(i));
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wint-to-void-pointer-cast"
         GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized,
             layout.GetStride(), (void *) offset));
+#pragma clang diagnostic pop
         offset += element.count * VertexBufferElement::GetSizeOfType(element.type);
     }
 }

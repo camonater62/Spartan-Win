@@ -1,17 +1,10 @@
-#include "TestDirectionalLight.h"
+#include "Cube.h"
 
-#include "Macros.h"
 #include "Renderer.h"
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <imgui.h>
-#include <iostream>
 
-namespace test {
-
-TestDirectionalLight::TestDirectionalLight()
-    : m_RotationSpeed(1.0f) {
-
+Cube::Cube() {
     float vertices[] = {
         // Position (3) // Normal (3) // Tex coord (2)
         // Front
@@ -45,7 +38,6 @@ TestDirectionalLight::TestDirectionalLight()
         0.5f, -0.5f, 0.5f, 0.f, -1.0f, 0.f, 1.0f, 1.0f, // 22
         0.5f, -0.5f, -0.5f, 0.f, -1.0f, 0.f, 0.0f, 1.0f, // 23
     };
-
     unsigned int indices[] = {
         // Front
         0, 1, 2, // 0
@@ -77,10 +69,6 @@ TestDirectionalLight::TestDirectionalLight()
     m_VAO->AddBuffer(*m_VBO, layout);
     m_IBO = std::make_unique<IndexBuffer>(indices, 36);
 
-    m_Proj = glm::perspective(glm::radians(45.f), 960.f / 540.f, 0.1f, 100.f);
-    m_View = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -4));
-    m_Model = glm::mat4(1.0f);
-
     m_Shader = std::make_unique<Shader>("res/shaders/Normal.shader");
     m_Shader->Bind();
 
@@ -90,31 +78,17 @@ TestDirectionalLight::TestDirectionalLight()
     m_Shader->UnBind();
 }
 
-TestDirectionalLight::~TestDirectionalLight() {
+Cube::~Cube() {
 }
 
-void TestDirectionalLight::OnUpdate(float deltaTime) {
-    glm::vec3 axis = glm::normalize(glm::vec3(1.0f, 0.5f, 0.0f));
-    float angle = m_RotationSpeed * deltaTime * glm::radians(45.f);
-    m_Model = glm::rotate(m_Model, angle, axis);
-}
-
-void TestDirectionalLight::OnRender() {
-    GLCall(glEnable(GL_DEPTH_TEST));
-    GLCall(glDisable(GL_CULL_FACE));
-
+void Cube::draw(const glm::mat4 &MVP, std::optional<Shader *> opt_shader,
+    std::optional<Texture *> opt_texture) {
+    Shader *shader = opt_shader.value_or(m_Shader.get());
     Renderer renderer;
-
-    glm::mat4 mvp = m_Proj * m_View * m_Model;
-    m_Shader->Bind();
-    m_Shader->SetUniformMat4f("u_MVP", mvp);
-    renderer.Draw(*m_VAO, *m_IBO, *m_Shader);
-}
-
-void TestDirectionalLight::OnImGuiRender() {
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
-        ImGui::GetIO().Framerate);
-    ImGui::SliderFloat("Rotation Speed", &m_RotationSpeed, 0.0f, 20.0f);
-}
-
+    shader->Bind();
+    shader->SetUniformMat4f("u_MVP", MVP);
+    if (opt_texture) {
+        opt_texture.value()->Bind();
+    }
+    renderer.Draw(*m_VAO, *m_IBO, *shader);
 }

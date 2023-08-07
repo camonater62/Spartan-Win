@@ -1,5 +1,12 @@
 #include "TestJolt.h"
 
+#include "Renderer.h"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <imgui.h>
+
 // Jolt Physics Library (https://github.com/jrouwe/JoltPhysics)
 // SPDX-FileCopyrightText: 2021 Jorrit Rouwe
 // SPDX-License-Identifier: MIT
@@ -39,7 +46,14 @@ using namespace std;
 
 namespace test {
 
-TestJolt::TestJolt() {
+TestJolt::TestJolt()
+    : m_CameraPosition(0.0f, 5.0f, -50.0f)
+    , m_PhysicsTime(0.0f) {
+    m_Camera.SetProjectionMatrix(
+        glm::perspective(glm::radians(50.0f), 16.0f / 9.0f, 0.1f, 1000.0f));
+    m_Camera.SetLookAt(m_CameraPosition, m_CameraPosition + glm::vec3(0, 0, 1), glm::vec3(0, 1, 0));
+
+    m_Shader = std::make_unique<Shader>("res/shaders/Normal.shader");
 
     // We need a temp allocator for temporary allocations during the physics update. We're
     // pre-allocating 10 MB to avoid having to do allocations during the physics update.
@@ -52,10 +66,9 @@ TestJolt::TestJolt() {
     // you would implement the JobSystem interface yourself and let Jolt Physics run on top
     // of your own job scheduler. JobSystemThreadPool is an example implementation.
     job_system = std::make_unique<JobSystemThreadPool>(
-        cMaxPhysicsJobs, cMaxPhysicsBarriers, thread::hardware_concurrency() - 1);
+        cMaxPhysicsJobs, cMaxPhysicsBarriers, thread::hardware_concurrency() / 2);
 
     // Now we can create the actual physics system.
-
     physics_system.Init(cMaxBodies, cNumBodyMutexes, cMaxBodyPairs, cMaxContactConstraints,
         broad_phase_layer_interface, object_vs_broadphase_layer_filter,
         object_vs_object_layer_filter);
@@ -100,13 +113,10 @@ TestJolt::TestJolt() {
 
     // Now create a dynamic body to bounce on the floor
     // Note that this uses the shorthand version of creating and adding a body to the world
-    sphere_settings = BodyCreationSettings(new SphereShape(0.5f), RVec3(0.0_r, 2.0_r, 0.0_r),
-        Quat::sIdentity(), EMotionType::Dynamic, Layers::MOVING);
-    sphere_id = body_interface->CreateAndAddBody(sphere_settings, EActivation::Activate);
-
-    // Now you can interact with the dynamic body, in this case we're going to give it a velocity.
-    // (note that if we had used CreateBody then we could have set the velocity straight on the body before adding it to the physics system)
-    body_interface->SetLinearVelocity(sphere_id, Vec3(0.0f, -5.0f, 0.0f));
+    // sphere_settings = BodyCreationSettings(new SphereShape(0.5f), RVec3(0.0_r, 2.0_r, 0.0_r),
+    //     Quat::sIdentity(), EMotionType::Dynamic, Layers::MOVING);
+    // sphere_id = body_interface->CreateAndAddBody(sphere_settings, EActivation::Activate);
+    createStack(JPH::Vec3(0.0_r, 20.0_r, 0.0_r), 50, 0.5f);
 
     // We simulate the physics world in discrete time steps. 60 Hz is a good rate to update the physics system.
     // const float cDeltaTime = 1.0f / 60.0f;
@@ -118,11 +128,17 @@ TestJolt::TestJolt() {
 }
 
 TestJolt::~TestJolt() {
+
+    for (const auto &box : m_Boxes) {
+        body_interface->RemoveBody(box);
+        body_interface->DestroyBody(box);
+    }
+
     // Remove the sphere from the physics system. Note that the sphere itself keeps all of its state and can be re-added at any time.
-    body_interface->RemoveBody(sphere_id);
+    // body_interface->RemoveBody(sphere_id);
 
     // Destroy the sphere. After this the sphere ID is no longer valid.
-    body_interface->DestroyBody(sphere_id);
+    // body_interface->DestroyBody(sphere_id);
 
     // Remove and destroy the floor
     body_interface->RemoveBody(floor->GetID());
@@ -137,26 +153,74 @@ TestJolt::~TestJolt() {
 }
 
 void TestJolt::OnUpdate(float deltaTime) {
+    auto tick = std::chrono::high_resolution_clock::now();
 
-    if (body_interface->IsActive(sphere_id)) {
-        // Output current position and velocity of the sphere
-        RVec3 position = body_interface->GetCenterOfMassPosition(sphere_id);
-        Vec3 velocity = body_interface->GetLinearVelocity(sphere_id);
-        cout << "Position = (" << position.GetX() << ", " << position.GetY() << ", "
-             << position.GetZ() << "), Velocity = (" << velocity.GetX() << ", " << velocity.GetY()
-             << ", " << velocity.GetZ() << ")" << endl;
+    const int cCollisionSteps = 1;
+    physics_system.Update(deltaTime, cCollisionSteps, temp_allocator.get(), job_system.get());
 
-        // If you take larger steps than 1 / 60th of a second you need to do multiple collision steps in order to keep the simulation stable. Do 1 collision step per 1 / 60th of a second (round up).
-        const int cCollisionSteps = 1;
-
-        // Step the world
-        physics_system.Update(deltaTime, cCollisionSteps, temp_allocator.get(), job_system.get());
-    }
+    auto tock = std::chrono::high_resolution_clock::now();
+    m_PhysicsTime = std::chrono::duration<float, std::chrono::seconds::period>(tock - tick).count();
 }
 
 void TestJolt::OnRender() {
+    GLCall(glEnable(GL_DEPTH_TEST));
+    GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    GLCall(glDisable(GL_CULL_FACE)); // TODO: Remove this
+
+    for (const auto &BodyID : m_Boxes) {
+        Vec3 j_position = body_interface->GetCenterOfMassPosition(BodyID);
+        Quat j_rotation = body_interface->GetRotation(BodyID);
+
+        glm::mat4 translate = glm::translate(
+            glm::mat4(1.0f), glm::vec3(j_position.GetX(), j_position.GetY(), j_position.GetZ()));
+        glm::mat4 rotation = glm::mat4_cast(
+            glm::quat(j_rotation.GetW(), j_rotation.GetX(), j_rotation.GetY(), j_rotation.GetZ()));
+
+        glm::mat4 model = translate * rotation;
+
+        glm::mat4 MVP = m_Camera.GetViewProjectionMatrix() * model;
+
+        m_Cube.draw(MVP, m_Shader.get());
+    }
 }
 
 void TestJolt::OnImGuiRender() {
+    ImGui::Text("%ld boxes", m_Boxes.size());
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
+        ImGui::GetIO().Framerate);
+    ImGui::Text(
+        "Physics sim took %.3f ms/frame (%.1f FPS)", 1000.0f * m_PhysicsTime, 1.0f / m_PhysicsTime);
 }
+
+void TestJolt::createStack(JPH::Vec3 transform, uint size, float halfExtent) {
+    // Next we can create a rigid body to serve as the floor, we make a large box
+    // Create the settings for the collision volume (the shape).
+    // Note that for simple shapes (like boxes) you can also directly construct a BoxShape.
+    BoxShapeSettings box_shape_settings(Vec3(halfExtent, halfExtent, halfExtent));
+
+    // Create the shape
+    ShapeSettings::ShapeResult box_shape_result = box_shape_settings.Create();
+    RefConst<Shape> box_shape
+        = box_shape_result
+              .Get(); // We don't expect an error here, but you can check box_shape_result for HasError() / GetError()
+
+    for (uint i = 0; i < size; i++) {
+        for (uint j = 0; j < size - i; j++) {
+            Vec3 localTransform(
+                Vec3((float) (j * 2) - (float) (size - i), (float) (i * 2 + 1), 0.0f) * halfExtent);
+            Vec3 pos = transform + localTransform;
+
+            // Create the settings for the body itself. Note that here you can also set other properties like the restitution / friction.
+            BodyCreationSettings box_settings(
+                box_shape, pos, Quat::sIdentity(), EMotionType::Dynamic, Layers::MOVING);
+
+            // Create the actual rigid body
+            BodyID box = body_interface->CreateAndAddBody(box_settings,
+                EActivation::Activate); // Note that if we run out of bodies this can return nullptr
+
+            m_Boxes.push_back(box);
+        }
+    }
+}
+
 }

@@ -36,8 +36,8 @@ private:
         std::shared_ptr<VertexArray> VAO;
         std::shared_ptr<VertexBuffer> VBO;
         std::shared_ptr<IndexBuffer> IBO;
-        std::shared_ptr<Shader> Shader;
-        std::shared_ptr<Texture> Texture;
+        std::shared_ptr<Shader> shader;
+        std::shared_ptr<Texture> texture;
 
         unsigned int MaterialIndex;
 

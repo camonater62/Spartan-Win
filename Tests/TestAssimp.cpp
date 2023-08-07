@@ -82,13 +82,13 @@ TestAssimp::TestAssimp()
 
         m.Model = glm::scale(glm::mat4(1.0f), glm::vec3(0.01f));
 
-        m.Shader = std::make_unique<Shader>("res/shaders/BasicTexture.shader");
-        m.Shader->Bind();
+        m.shader = std::make_unique<Shader>("res/shaders/BasicTexture.shader");
+        m.shader->Bind();
 
         m.VAO->UnBind();
         m.VBO->UnBind();
         m.IBO->UnBind();
-        m.Shader->UnBind();
+        m.shader->UnBind();
 
         m.MaterialIndex = mesh->mMaterialIndex;
         aiMaterial *material = m_Scene->mMaterials[mesh->mMaterialIndex];
@@ -103,7 +103,7 @@ TestAssimp::TestAssimp()
         for (const auto &texture : { specularTexture, diffuseTexture }) {
             if (texture) {
                 if (texture->mHeight == 0) {
-                    m.Texture = std::make_unique<Texture>(
+                    m.texture = std::make_unique<Texture>(
                         (unsigned char *) texture->pcData, texture->mWidth);
                     // std::cout << "Texture width: " << m.Texture->GetWidth() << std::endl;
                     // std::cout << "Texture height: " << m.Texture->GetHeight() << std::endl;
@@ -146,12 +146,12 @@ void TestAssimp::OnRender() {
     for (const auto &mesh : m_Meshes) {
 
         glm::mat4 mvp = m_Proj * m_View * mesh.Model;
-        mesh.Shader->Bind();
-        mesh.Shader->SetUniformMat4f("u_MVP", mvp);
-        if (mesh.Texture) {
-            mesh.Texture->Bind();
+        mesh.shader->Bind();
+        mesh.shader->SetUniformMat4f("u_MVP", mvp);
+        if (mesh.texture) {
+            mesh.texture->Bind();
         }
-        renderer.Draw(*mesh.VAO, *mesh.IBO, *mesh.Shader);
+        renderer.Draw(*mesh.VAO, *mesh.IBO, *mesh.shader);
     }
 }
 

@@ -1,6 +1,6 @@
 CC = clang++
 WARNINGS = -Wall -Wextra -Werror -Wpedantic -Wno-int-to-void-pointer-cast
-CFLAGS = $(WARNINGS) -O2 -g -std=c++17 -march=x86-64-v2 -mtune=generic -pipe
+CFLAGS = $(WARNINGS) -std=c++17 -march=x86-64-v2 -mtune=generic -pipe -flto=thin
 NAME = Spartan
 SRC = main.cpp \
 		Camera.cpp \
@@ -10,10 +10,24 @@ SRC = main.cpp \
 		Shader.cpp \
 		Texture.cpp \
 		VertexArray.cpp \
-		VertexBuffer.cpp
+		VertexBuffer.cpp \
+		Cube.cpp 
 INCLUDE = -I.
 LIBS = -lGL
-DEFINE = -D_DEBUG
+DEFINE =
+
+DEBUG ?= 1
+ifeq ($(DEBUG), 1)
+	DEFINE += -D_DEBUG
+	CFLAGS += -g -O1
+	OBJ_DIR = debug
+else
+	DEFINE += -D_RELEASE -DNDEBUG
+	CFLAGS += -O3 -g
+	OBJ_DIR = release
+endif
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.cpp=.o))
+OUT_EXE = $(NAME)
 
 # Tests
 SRC += Tests/Test.cpp \
@@ -22,7 +36,7 @@ SRC += Tests/Test.cpp \
 		Tests/TestCube.cpp \
 		Tests/TestJolt.cpp \
 		Tests/TestNoise.cpp \
-		Tests/TestAssimp.cpp \
+		Tests/TestAssimp.cpp 
 		
 INCLUDE += -ITests
 
@@ -60,13 +74,9 @@ INCLUDE += -Ivendor/glm
 LIBS += -Lvendor/Jolt/lib -lJolt
 INCLUDE += -Ivendor/Jolt/include
 CFLAGS += -ffp-model=precise -pthread -mavx2 -mbmi -mpopcnt -mlzcnt -mf16c -mfma
-DEFINE += -DJPH_DEBUG_RENDERER -DJPH_PROFILE_ENABLED -DJPH_USE_AVX -DJPH_USE_AVX2 -DJPH_USE_F16C -DJPH_USE_FMADD -DJPH_USE_LZCNT -DJPH_USE_SSE4_1 -DJPH_USE_SSE4_2 -DJPH_USE_TZCNT -D_DEBUG
+DEFINE += -DJPH_DEBUG_RENDERER -DJPH_PROFILE_ENABLED -DJPH_USE_AVX -DJPH_USE_AVX2 -DJPH_USE_F16C -DJPH_USE_FMADD -DJPH_USE_LZCNT -DJPH_USE_SSE4_1 -DJPH_USE_SSE4_2 -DJPH_USE_TZCNT
 
-OBJ_DIR = obj
-OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.cpp=.o))
-OUT_EXE = $(NAME)
-
-all: $(OUT_EXE)
+default: $(OUT_EXE)
 
 $(OUT_EXE): $(OBJ)
 	$(CC) $(CFLAGS) $(INCLUDE) $(DEFINE) -o $@ $^ $(LIBS)
@@ -76,4 +86,4 @@ $(OBJ_DIR)/%.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) $(DEFINE) -c -o $@ $<
 
 clean:
-	rm -rf $(OBJ_DIR) $(OUT_EXE)
+	rm -rf $(OUT_EXE) debug release

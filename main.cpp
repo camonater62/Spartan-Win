@@ -11,12 +11,9 @@
 #include "TestAssimp.h"
 #include "TestClearColor.h"
 #include "TestCube.h"
-#include "TestDirectionalLight.h"
-#include "TestNoise.h"
-//#include "TestPhysX.h"
-#include "TestTexture2D.h"
-//#include "TestVehicle.h"
 #include "TestJolt.h"
+#include "TestNoise.h"
+#include "TestTexture2D.h"
 
 // OpenGL
 #include <GL/glew.h>
@@ -41,8 +38,6 @@
 #include <Jolt/Jolt.h>
 #include <Jolt/Physics/Body/BodyActivationListener.h>
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
-#include <Jolt/Physics/Collision/Shape/BoxShape.h>
-#include <Jolt/Physics/Collision/Shape/SphereShape.h>
 #include <Jolt/Physics/PhysicsSettings.h>
 #include <Jolt/Physics/PhysicsSystem.h>
 #include <Jolt/RegisterTypes.h>
@@ -99,7 +94,7 @@ int main(void) {
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    glfwSwapInterval(0); // V-Sync
+    glfwSwapInterval(1); // V-Sync
 
     if (glewInit() != GLEW_OK) {
         std::cerr << "Error!" << std::endl;
@@ -156,10 +151,7 @@ int main(void) {
     testMenu->RegisterTest<test::TestClearColor>("Clear Color");
     testMenu->RegisterTest<test::TestTexture2D>("2D Texture");
     testMenu->RegisterTest<test::TestCube>("Cube");
-    // testMenu->RegisterTest<test::TestDirectionalLight>("Directional Light");
-    //testMenu->RegisterTest<test::TestPhysX>("PhysX");
     testMenu->RegisterTest<test::TestAssimp>("Assimp");
-    //testMenu->RegisterTest<test::TestVehicle>("Vehicle");
     testMenu->RegisterTest<test::TestNoise>("Noise");
     testMenu->RegisterTest<test::TestJolt>("Jolt");
 

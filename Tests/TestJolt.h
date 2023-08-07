@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Camera.h"
+#include "Cube.h"
+#include "Shader.h"
 #include "Test.h"
 
 // The Jolt headers don't include Jolt.h. Always include Jolt.h before including any other Jolt header.
@@ -172,16 +175,26 @@ public:
     void OnImGuiRender() override;
 
 private:
+    void createStack(JPH::Vec3 pos, uint size, float halfExtent);
+
+    Cube m_Cube;
+    Camera m_Camera;
+    glm::vec3 m_CameraPosition;
+    std::unique_ptr<Shader> m_Shader;
+
+    float m_PhysicsTime;
+
     JPH::BodyInterface *body_interface;
     JPH::Body *floor;
     JPH::BodyID sphere_id;
     std::unique_ptr<JPH::TempAllocatorImpl> temp_allocator;
     std::unique_ptr<JPH::JobSystemThreadPool> job_system;
     JPH::PhysicsSystem physics_system;
+    JPH::BodyIDVector m_Boxes;
 
     // This is the max amount of rigid bodies that you can add to the physics system. If you try to add more you'll get an error.
     // Note: This value is low because this is a simple test. For a real project use something in the order of 65536.
-    const uint cMaxBodies = 1024;
+    const uint cMaxBodies = 65536;
 
     // This determines how many mutexes to allocate to protect rigid bodies from concurrent access. Set it to 0 for the default settings.
     const uint cNumBodyMutexes = 0;
@@ -190,12 +203,12 @@ private:
     // body pairs based on their bounding boxes and will insert them into a queue for the narrowphase). If you make this buffer
     // too small the queue will fill up and the broad phase jobs will start to do narrow phase work. This is slightly less efficient.
     // Note: This value is low because this is a simple test. For a real project use something in the order of 65536.
-    const uint cMaxBodyPairs = 1024;
+    const uint cMaxBodyPairs = 65536;
 
     // This is the maximum size of the contact constraint buffer. If more contacts (collisions between bodies) are detected than this
     // number then these contacts will be ignored and bodies will start interpenetrating / fall through the world.
     // Note: This value is low because this is a simple test. For a real project use something in the order of 10240.
-    const uint cMaxContactConstraints = 1024;
+    const uint cMaxContactConstraints = 10240;
 
     // Create mapping table from object layer to broadphase layer
     // Note: As this is an interface, PhysicsSystem will take a reference to this so this instance needs to stay alive!
