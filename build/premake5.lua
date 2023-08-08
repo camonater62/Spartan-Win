@@ -8,10 +8,11 @@ project "Core"
     language "C++"
     targetdir "bin/%{cfg.buildcfg}"
     warnings "Extra"
+    cppdialect "C++17"
 
     filter "platforms:Linux"
         toolset "clang"
-        buildoptions { "-std=c++17", "-march=x86-64-v2", "-mtune=generic", "-pipe" }
+        buildoptions { "-march=x86-64-v2", "-mtune=generic", "-pipe" }
         linkoptions { "-flto=thin" }
 
     files { "../*.h", "../*.cpp" }
@@ -81,7 +82,7 @@ project "Core"
         defines { "NDEBUG", "RELEASE" }
         optimize "On"
 
-    postbuildcommands {
-        "{COPY} %{cfg.targetdir}/%{cfg.targetname} .."
-    }
+    -- postbuildcommands {
+    --     "{COPY} %{cfg.targetdir}/%{cfg.targetname} .."
+    -- }
     

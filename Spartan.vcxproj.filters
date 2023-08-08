@@ -81,9 +81,6 @@
     <ClCompile Include="Tests\TestCube.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\TestDirectionalLight.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
     <ClCompile Include="Tests\TestNoise.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
@@ -93,8 +90,11 @@
     <ClCompile Include="Tests\TestAssimp.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
-    <ClCompile Include="TestJolt.cpp">
+    <ClCompile Include="Tests\TestJolt.cpp">
       <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,26 +164,20 @@
     <ClInclude Include="Tests\TestCube.h">
       <Filter>Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Tests\TestDirectionalLight.h">
-      <Filter>Tests</Filter>
-    </ClInclude>
     <ClInclude Include="Tests\TestNoise.h">
-      <Filter>Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="Tests\TestPhysX.h">
       <Filter>Tests</Filter>
     </ClInclude>
     <ClInclude Include="Tests\TestTexture2D.h">
       <Filter>Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Tests\TestVehicle.h">
-      <Filter>Tests</Filter>
-    </ClInclude>
     <ClInclude Include="Tests\TestAssimp.h">
       <Filter>Tests</Filter>
     </ClInclude>
-    <ClInclude Include="TestJolt.h">
+    <ClInclude Include="Tests\TestJolt.h">
       <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

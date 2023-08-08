@@ -128,9 +128,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC;JPH_PROFILE_ENABLED;JPH_DEBUG_RENDERER;JPH_USE_AVX2;JPH_USE_AVX;JPH_USE_SSE4_1;JPH_USE_SSE4_2;JPH_USE_LZCNT;JPH_USE_TZCNT;JPH_USE_F16C;JPH_USE_FMADD</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,17 +144,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="TestJolt.cpp" />
     <ClCompile Include="Tests\Test.cpp" />
     <ClCompile Include="Tests\TestAssimp.cpp" />
     <ClCompile Include="Tests\TestClearColor.cpp" />
     <ClCompile Include="Tests\TestCube.cpp" />
-    <ClCompile Include="Tests\TestDirectionalLight.cpp" />
+    <ClCompile Include="Tests\TestJolt.cpp" />
     <ClCompile Include="Tests\TestNoise.cpp" />
     <ClCompile Include="Tests\TestTexture2D.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -169,21 +170,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Macros.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="TestJolt.h" />
     <ClInclude Include="Tests\Test.h" />
     <ClInclude Include="Tests\TestAssimp.h" />
     <ClInclude Include="Tests\TestClearColor.h" />
     <ClInclude Include="Tests\TestCube.h" />
-    <ClInclude Include="Tests\TestDirectionalLight.h" />
+    <ClInclude Include="Tests\TestJolt.h" />
     <ClInclude Include="Tests\TestNoise.h" />
-    <ClInclude Include="Tests\TestPhysX.h" />
     <ClInclude Include="Tests\TestTexture2D.h" />
-    <ClInclude Include="Tests\TestVehicle.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="vendor\imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="vendor\imgui\backends\imgui_impl_opengl3.h" />
