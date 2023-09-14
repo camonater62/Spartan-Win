@@ -47,11 +47,11 @@ using namespace std;
 namespace test {
 
 TestJolt::TestJolt()
-    : m_CameraPosition(0.0f, 5.0f, -50.0f)
+    : m_CameraPosition(0.0f, 15.0f, 90.0f)
     , m_PhysicsTime(0.0f) {
     m_Camera.SetProjectionMatrix(
         glm::perspective(glm::radians(50.0f), 16.0f / 9.0f, 0.1f, 1000.0f));
-    m_Camera.SetLookAt(m_CameraPosition, m_CameraPosition + glm::vec3(0, 0, 1), glm::vec3(0, 1, 0));
+    m_Camera.SetLookAt(m_CameraPosition, m_CameraPosition - glm::vec3(0, 0, 1), glm::vec3(0, 1, 0));
 
     m_Shader = std::make_unique<Shader>("res/shaders/Normal.shader");
 
@@ -116,7 +116,7 @@ TestJolt::TestJolt()
     // sphere_settings = BodyCreationSettings(new SphereShape(0.5f), RVec3(0.0_r, 2.0_r, 0.0_r),
     //     Quat::sIdentity(), EMotionType::Dynamic, Layers::MOVING);
     // sphere_id = body_interface->CreateAndAddBody(sphere_settings, EActivation::Activate);
-    createStack(JPH::Vec3(0.0_r, 20.0_r, 0.0_r), 50, 0.5f);
+    createStack(JPH::Vec3(0.0_r, 30.0_r, 0.0_r), 100, 0.5f);
 
     // We simulate the physics world in discrete time steps. 60 Hz is a good rate to update the physics system.
     // const float cDeltaTime = 1.0f / 60.0f;

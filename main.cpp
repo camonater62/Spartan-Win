@@ -14,6 +14,7 @@
 #include "TestJolt.h"
 #include "TestNoise.h"
 #include "TestTexture2D.h"
+#include "TestLighting.h"
 
 // OpenGL
 #include <GL/glew.h>
@@ -84,7 +85,7 @@ int main(void) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1280, 720, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(1920, 1080, "Hello World", NULL, NULL);
     if (!window) {
         std::cerr << "Failed to create window!" << std::endl;
         glfwTerminate();
@@ -94,7 +95,7 @@ int main(void) {
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    glfwSwapInterval(1); // V-Sync
+    glfwSwapInterval(0); // V-Sync
 
     if (glewInit() != GLEW_OK) {
         std::cerr << "Error!" << std::endl;
@@ -105,6 +106,8 @@ int main(void) {
 
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+    
 
     Renderer renderer;
 
@@ -154,9 +157,15 @@ int main(void) {
     testMenu->RegisterTest<test::TestAssimp>("Assimp");
     testMenu->RegisterTest<test::TestNoise>("Noise");
     testMenu->RegisterTest<test::TestJolt>("Jolt");
+    testMenu->RegisterTest<test::TestLighting>("Lighting");
 
     auto currentTime = std::chrono::high_resolution_clock::now();
     auto lastUpdateTime = currentTime;
+
+
+    glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+        GLCall(glViewport(0, 0, width, height));
+    });
 
     while (!glfwWindowShouldClose(window)) {
         currentTime = std::chrono::high_resolution_clock::now();

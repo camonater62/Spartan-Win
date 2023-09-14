@@ -156,6 +156,7 @@
     <ClCompile Include="Tests\TestClearColor.cpp" />
     <ClCompile Include="Tests\TestCube.cpp" />
     <ClCompile Include="Tests\TestJolt.cpp" />
+    <ClCompile Include="Tests\TestLighting.cpp" />
     <ClCompile Include="Tests\TestNoise.cpp" />
     <ClCompile Include="Tests\TestTexture2D.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Tests\TestClearColor.h" />
     <ClInclude Include="Tests\TestCube.h" />
     <ClInclude Include="Tests\TestJolt.h" />
+    <ClInclude Include="Tests\TestLighting.h" />
     <ClInclude Include="Tests\TestNoise.h" />
     <ClInclude Include="Tests\TestTexture2D.h" />
     <ClInclude Include="Texture.h" />
@@ -200,6 +202,7 @@
     <ClInclude Include="VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\Lighting.shader" />
     <None Include="res\shaders\Basic.shader" />
     <None Include="res\shaders\BasicTexture.shader" />
     <None Include="res\shaders\DirectionalLight.shader" />

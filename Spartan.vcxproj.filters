@@ -99,6 +99,9 @@
     <ClCompile Include="Terrain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\TestLighting.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -185,6 +188,9 @@
     <ClInclude Include="Terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Tests\TestLighting.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader">
@@ -203,6 +209,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\shaders\QuestionBlock.shader">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\Lighting.shader">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

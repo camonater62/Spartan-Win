@@ -24,6 +24,11 @@ public:
 
     virtual void OnImGuiRender() {
     }
+
+    virtual void OnWindowResize(int width, int height) {
+		(void) width;
+		(void) height;
+	}
 };
 
 class TestMenu : public Test {

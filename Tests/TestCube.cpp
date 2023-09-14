@@ -5,7 +5,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <imgui.h>
-#include <iostream>
+#include <iostream> 
 
 namespace test {
 
@@ -40,4 +40,9 @@ void TestCube::OnImGuiRender() {
     ImGui::SliderFloat("Rotation Speed", &m_RotationSpeed, 0.0f, 20.0f);
     ImGui::SliderFloat3("Camera Position", &m_CameraPosition.x, -10.0f, 10.0f);
 }
+
+void TestCube::OnWindowResize(int width, int height) {
+	m_Camera.SetAspectRatio((float)width / (float)height);
+}
+
 }
