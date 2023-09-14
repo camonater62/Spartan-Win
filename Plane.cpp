@@ -6,11 +6,11 @@
 #include <iostream>
 #include <vector>
 
-Plane::Plane(int widthSegments, int heightSegments, bool noisy) {
+Plane::Plane(int widthSegments, int heightSegments) {
     std::vector<float> vertices;
     std::vector<unsigned int> indices;
 
-    generatePlane(widthSegments, heightSegments, noisy, vertices, indices);
+    generatePlane(widthSegments, heightSegments, vertices, indices);
 
     VertexBufferLayout layout = VertexBufferLayout();
     layout.Push<float>(3); // Position
@@ -42,8 +42,7 @@ void Plane::Render(glm::mat4 MVP) {
     renderer.Draw(*m_VAO, *m_IBO, *m_Shader);
 }
 
-void Plane::generatePlane(int widthSegments, int heightSegments, bool noisy,
-    std::vector<float> &vertices, std::vector<unsigned int> &indices) {
+void Plane::generatePlane(int widthSegments, int heightSegments, std::vector<float>& vertices, std::vector<unsigned int>& indices) {
     float seg_width = 1.0f / widthSegments;
     float seg_height = 1.0f / heightSegments;
 
@@ -52,11 +51,11 @@ void Plane::generatePlane(int widthSegments, int heightSegments, bool noisy,
 
         for (int j = 0; j < widthSegments + 1; j++) {
             float x = j * seg_width - 0.5f;
+            float z = 0.0f;
 
             // Position
             vertices.push_back(x);
             vertices.push_back(y);
-            float z = noisy ? glm::perlin(glm::vec2(4 * x, 4 * y)) : 0.0f;
             vertices.push_back(z);
 
             // Normal
@@ -69,10 +68,10 @@ void Plane::generatePlane(int widthSegments, int heightSegments, bool noisy,
             vertices.push_back(i * seg_height);
 
             // Color
-            float color = (z + 1.0f) / 2.0f;
-            vertices.push_back(color);
-            vertices.push_back(color);
-            vertices.push_back(color);
+            glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+            vertices.push_back(color.r);
+            vertices.push_back(color.g);
+            vertices.push_back(color.b);
         }
     }
 

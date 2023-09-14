@@ -150,6 +150,7 @@
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Tests\Test.cpp" />
     <ClCompile Include="Tests\TestAssimp.cpp" />
     <ClCompile Include="Tests\TestClearColor.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="Tests\Test.h" />
     <ClInclude Include="Tests\TestAssimp.h" />
     <ClInclude Include="Tests\TestClearColor.h" />
@@ -196,6 +198,14 @@
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexBufferLayout.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\BasicTexture.shader" />
+    <None Include="res\shaders\DirectionalLight.shader" />
+    <None Include="res\shaders\Normal.shader" />
+    <None Include="res\shaders\Plane.shader" />
+    <None Include="res\shaders\QuestionBlock.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

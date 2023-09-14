@@ -10,13 +10,13 @@
 
 class Plane {
 public:
-    Plane(int widthSegments = 1, int heightSegments = 1, bool noisy = false);
+    Plane(int widthSegments = 1, int heightSegments = 1);
     ~Plane();
 
     void Render(glm::mat4 MVP);
 
 protected:
-    void generatePlane(int widthSegments, int heightSegments, bool noisy,
+	void generatePlane(int widthSegments, int heightSegments,
         std::vector<float> &vertices, std::vector<unsigned int> &indices);
 
     std::shared_ptr<VertexArray> m_VAO;

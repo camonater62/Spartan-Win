@@ -9,14 +9,14 @@
 
 namespace test {
 
-TestNoise::TestNoise() {
+TestNoise::TestNoise() :
+    m_Terrain(511, 511) {
     m_Camera.SetProjectionMatrix(
         glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f));
     m_Camera.SetLookAt(glm::vec3(0, 0, 1), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
     glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.75f, 0.75f, 0.1f));
     glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), glm::radians(-45.0f), glm::vec3(1, 0, 0));
     m_Model = rotate * scale;
-    m_Plane = Plane(127, 127, true);
 }
 
 TestNoise::~TestNoise() {
@@ -31,7 +31,7 @@ void TestNoise::OnRender() {
     GLCall(glDisable(GL_CULL_FACE));
 
     glm::mat4 mvp = m_Camera.GetViewProjectionMatrix() * m_Model;
-    m_Plane.Render(mvp);
+    m_Terrain.Render(mvp);
 }
 
 void TestNoise::OnImGuiRender() {

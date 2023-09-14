@@ -22,10 +22,9 @@ layout(location = 0) out vec4 color;
 in vec3 v_Normal;
 
 void main() {
-    color.r = abs(v_Normal.r);
-    color.g = abs(v_Normal.g);
-    color.b = abs(v_Normal.b);
-    if (dot(v_Normal, vec3(1, 1, 1)) < 0.0)
-        color.rgb *= 0.8;
+    color.rgb = abs(v_Normal);
+    vec3 ones = vec3(1, 1, 1);
+    if (dot(v_Normal, ones) < 0.0)
+        color.rgb = ones - color.rgb;
     color.a = 1.0;
 }

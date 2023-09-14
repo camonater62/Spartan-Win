@@ -96,6 +96,9 @@
     <ClCompile Include="Cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -179,5 +182,28 @@
     <ClInclude Include="Cube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\Basic.shader">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\BasicTexture.shader">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\DirectionalLight.shader">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\Normal.shader">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\Plane.shader">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\QuestionBlock.shader">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

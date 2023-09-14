@@ -7,6 +7,7 @@
 #include "Test.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"
+#include "Terrain.h"
 
 #include <glm/glm.hpp>
 #include <memory>
@@ -23,7 +24,7 @@ public:
     void OnImGuiRender() override;
 
 private:
-    Plane m_Plane;
+    Terrain m_Terrain;
 
     glm::mat4 m_Model;
 

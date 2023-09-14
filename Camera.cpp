@@ -3,8 +3,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 Camera::Camera()
-    : m_Proj(glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f))
-    , m_View(glm::mat4(1.0f)) {
+    : m_View(glm::mat4(1.0f))
+    , m_FOV(60.0f)
+    , m_AspectRatio(16.0f / 9.0f)
+    , m_NearPlane(0.01f)
+    , m_FarPlane(100.0f)
+{
+    RecalculateProjectionMatrix();
 }
 
 Camera::~Camera() {
@@ -16,4 +21,8 @@ void Camera::SetLookAt(
     glm::vec3 right = glm::normalize(glm::cross(front, worldUp));
     glm::vec3 up = glm::normalize(glm::cross(right, front));
     m_View = glm::lookAt(position, position + front, up);
+}
+
+void Camera::RecalculateProjectionMatrix() {
+	m_Proj = glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_NearPlane, m_FarPlane);
 }
